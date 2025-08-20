@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'https://backend-r5ha.onrender.com'
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000'
 
 export async function fetchProducts(limit = 24) {
   const res = await fetch(`${API_BASE}/api/products?limit=${encodeURIComponent(limit)}`)
@@ -109,6 +109,72 @@ export async function createOrder(payload) {
     method: 'POST',
     headers,
     body: JSON.stringify(payload),
+  })
+  const data = await safeJson(res)
+  if (!res.ok) return { ok: false, error: data?.error || `API error: ${res.status}` }
+  return data
+}
+
+export async function fetchMyOrders() {
+  const token = localStorage.getItem('auth_token') || ''
+  if (!token) return { ok: false, error: 'Not authenticated' }
+  const res = await fetch(`${API_BASE}/api/orders/my`, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  const data = await safeJson(res)
+  if (!res.ok) return { ok: false, error: data?.error || `API error: ${res.status}` }
+  return data
+}
+
+export async function fetchAdminOrders() {
+  const token = localStorage.getItem('auth_token') || ''
+  if (!token) return { ok: false, error: 'Not authenticated' }
+  const res = await fetch(`${API_BASE}/api/admin/orders`, { headers: { Authorization: `Bearer ${token}` } })
+  const data = await safeJson(res)
+  if (!res.ok) return { ok: false, error: data?.error || `API error: ${res.status}` }
+  return data
+}
+
+// Real-time admin events (SSE)
+export function openAdminEventStream() {
+  const token = localStorage.getItem('auth_token') || ''
+  if (!token) return null
+  const url = new URL(`${API_BASE}/api/admin/events`)
+  url.searchParams.set('token', token)
+  const ev = new EventSource(url.toString())
+  return ev
+}
+
+// Admin: users and order status
+export async function fetchAdminUsers() {
+  const token = localStorage.getItem('auth_token') || ''
+  if (!token) return { ok: false, error: 'Not authenticated' }
+  const res = await fetch(`${API_BASE}/api/admin/users`, { headers: { Authorization: `Bearer ${token}` } })
+  const data = await safeJson(res)
+  if (!res.ok) return { ok: false, error: data?.error || `API error: ${res.status}` }
+  return data
+}
+
+export async function updateOrderStatus(orderId, status) {
+  const token = localStorage.getItem('auth_token') || ''
+  if (!token) return { ok: false, error: 'Not authenticated' }
+  const res = await fetch(`${API_BASE}/api/admin/orders/${encodeURIComponent(orderId)}/status`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ status }),
+  })
+  const data = await safeJson(res)
+  if (!res.ok) return { ok: false, error: data?.error || `API error: ${res.status}` }
+  return data
+}
+
+export async function setUserAdmin(userId, isAdmin) {
+  const token = localStorage.getItem('auth_token') || ''
+  if (!token) return { ok: false, error: 'Not authenticated' }
+  const res = await fetch(`${API_BASE}/api/auth/users/${encodeURIComponent(userId)}/admin`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ isAdmin: !!isAdmin }),
   })
   const data = await safeJson(res)
   if (!res.ok) return { ok: false, error: data?.error || `API error: ${res.status}` }

@@ -63,11 +63,11 @@ export default function Contact() {
             <div className="contact-aside-list">
               <div>
                 <div className="meta-label">Email</div>
-                <div className="meta-value">support@kos.example</div>
+                <div className="meta-value">torontobeaty@gmail.com</div>
               </div>
               <div>
                 <div className="meta-label">Phone</div>
-                <div className="meta-value">+1 (555) 123-4567</div>
+                <div className="meta-value">+974 3080 069</div>
               </div>
             </div>
           </div>

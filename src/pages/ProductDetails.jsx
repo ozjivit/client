@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { fetchProducts, fetchReviews, submitReview } from '../api'
 import { useCart } from '../state/CartContext.jsx'
+import { useAuth } from '../state/AuthContext.jsx'
 import '../App.css'
 
 function StarDisplay({ value = 0 }) {
@@ -39,6 +40,7 @@ export default function ProductDetails() {
   const [product, setProduct] = useState(null)
   const [allProducts, setAllProducts] = useState([])
   const { addItem } = useCart()
+  const { user } = useAuth()
 
   const [reviews, setReviews] = useState([])
   const [average, setAverage] = useState(0)
@@ -182,7 +184,10 @@ export default function ProductDetails() {
             <div className="form-actions" style={{ marginTop: 16 }}>
               <button
                 className="btn primary"
-                onClick={() => addItem({ id: displayProduct.id || displayProduct.name, name: displayProduct.name, price: displayProduct.price, currency: displayProduct.currency, img: displayProduct.img })}
+                onClick={() => {
+                  if (!user) { alert('Please login to add items to cart'); return }
+                  addItem({ id: displayProduct.id || displayProduct.name, name: displayProduct.name, price: displayProduct.price, currency: displayProduct.currency, img: displayProduct.img })
+                }}
               >
                 Add to Cart
               </button>
