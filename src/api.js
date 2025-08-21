@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000'
+// Use Render backend by default; can be overridden with VITE_API_BASE
+const API_BASE = import.meta.env.VITE_API_BASE || 'https://backend-r5ha.onrender.com'
 
 export async function fetchProducts(limit = 24) {
   const res = await fetch(`${API_BASE}/api/products?limit=${encodeURIComponent(limit)}`)
