@@ -114,6 +114,42 @@ function Categories() {
   )
 }
 
+function UspCarousel() {
+  const items = [
+    { icon: '🚚', title: 'Free Shipping', sub: 'Over QAR 200' },
+    { icon: '↩️', title: 'Easy Returns', sub: '30-day guarantee' },
+    { icon: '🕑', title: 'Fast Support', sub: '9am–9pm daily' },
+    { icon: '🔒', title: 'Secure Checkout', sub: '256-bit SSL' },
+  ]
+
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setIndex((prev) => (prev + 1) % items.length)
+    }, 3000)
+    return () => clearInterval(id)
+  }, [items.length])
+
+  return (
+    <div className="usp-carousel" role="region" aria-label="Store benefits" aria-live="polite">
+      <div className="usp-track" style={{ transform: `translateX(-${index * 100}%)` }}>
+        {items.map((it, i) => (
+          <div key={i} className="usp-slide">
+            <div className="usp-item">
+              <div className="usp-icon">{it.icon}</div>
+              <div className="usp-text">
+                <div className="usp-title">{it.title}</div>
+                <div className="usp-sub">{it.sub}</div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function BestSellers() {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
@@ -892,12 +928,15 @@ function App() {
     <main className="page">
       <HeroBanner />
       <section className="section">
+        {/* Desktop/tablet static strip */}
         <div className="usp-strip">
           <div className="usp-item"><div className="usp-icon">🚚</div><div className="usp-text"><div className="usp-title">Free Shipping</div><div className="usp-sub">Over QAR 200</div></div></div>
           <div className="usp-item"><div className="usp-icon">↩️</div><div className="usp-text"><div className="usp-title">Easy Returns</div><div className="usp-sub">30-day guarantee</div></div></div>
           <div className="usp-item"><div className="usp-icon">🕑</div><div className="usp-text"><div className="usp-title">Fast Support</div><div className="usp-sub">9am–9pm daily</div></div></div>
           <div className="usp-item"><div className="usp-icon">🔒</div><div className="usp-text"><div className="usp-title">Secure Checkout</div><div className="usp-sub">256-bit SSL</div></div></div>
         </div>
+        {/* Mobile auto-sliding carousel */}
+        <UspCarousel />
       </section>
       <Categories />
       <BestSellers />

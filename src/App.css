@@ -1864,12 +1864,7 @@ html, body {
 
 @media (max-width: 480px) {
   .usp-strip {
-    gap: 10px;
-    padding: 16px;
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    display: none; /* hide desktop strip on phones; use carousel */
   }
   
   .usp-item {
@@ -1886,6 +1881,28 @@ html, body {
   
   .usp-icon {
     animation: pulse 3s infinite;
+  }
+}
+
+/* USP mobile carousel */
+.usp-carousel { display: none; }
+@media (max-width: 480px) {
+  .usp-carousel {
+    display: block;
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+  }
+  .usp-carousel .usp-track {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+    will-change: transform;
+  }
+  .usp-carousel .usp-slide {
+    min-width: 100%;
+    flex-shrink: 0;
+    padding: 16px;
   }
 }
 
@@ -2163,6 +2180,13 @@ html, body {
   .hero-title {
     letter-spacing: 0.5px;
   }
+}
+
+/* Hide banner/promo dots on phones for cleaner UI */
+@media (max-width: 640px) {
+  .hero-indicators,
+  .hero-dots,
+  .promo-dots { display: none !important; }
 }
 
 /* Search controls responsive improvements */
@@ -4360,7 +4384,7 @@ html, body {
 }
 
 /* Sticky Promo Ribbon */
-.site-wrapper.has-promo .navbar { top: 42px; }
+.site-wrapper.has-promo .navbar { top: 52px; }
 .promo-ribbon {
   position: sticky;
   top: 0;
@@ -4368,6 +4392,7 @@ html, body {
   background: #111;
   color: #fff;
   padding: 8px 0;
+  margin-bottom: 10px; /* create gap above navbar */
   border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 .promo-ribbon-inner {
@@ -4378,8 +4403,17 @@ html, body {
   align-items: center;
   gap: 10px;
   justify-content: center;
+  flex-wrap: nowrap; /* keep everything on one line */
 }
-.promo-ribbon-text { font-size: 14px; opacity: 0.95; }
+.promo-ribbon-text {
+  font-size: 14px;
+  opacity: 0.95;
+  white-space: nowrap; /* prevent text wrap */
+  overflow: hidden; /* allow truncation on very small screens */
+  text-overflow: ellipsis;
+  flex: 1 1 auto; /* let text shrink first */
+  min-width: 0; /* enable ellipsis in flex */
+}
 .code-pill {
   display: inline-flex;
   align-items: center;
@@ -4392,9 +4426,17 @@ html, body {
   cursor: pointer;
   font-weight: 800;
   font-size: 12px;
+  white-space: nowrap; /* keep code chip on one line */
+  flex: 0 0 auto;
 }
 .code-pill.copied { background: #16a34a; color: #fff; }
-.promo-ribbon-cta { color: #fff; font-weight: 700; text-decoration: underline; }
+.promo-ribbon-cta {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+  white-space: nowrap; /* keep CTA on one line */
+  flex: 0 0 auto;
+}
 .promo-ribbon-close {
   position: absolute;
   right: 8px;
