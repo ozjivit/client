@@ -19,10 +19,65 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  /* Prevent horizontal scroll on mobile */
+  overflow-x: hidden;
 }
 
 h1 { line-height: 1.2; }
 
 button { font-family: inherit; }
 
-#root { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
+#root { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 32px 20px; 
+}
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 768px) {
+  #root {
+    padding: 24px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  #root {
+    padding: 16px 12px;
+  }
+  
+  body {
+    font-size: 14px;
+  }
+}
+
+/* Improve touch targets on mobile */
+@media (max-width: 768px) {
+  button, a, input, select, textarea {
+    min-height: 44px;
+  }
+  
+  /* Ensure buttons are large enough for touch */
+  .btn, button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Better mobile scrolling */
+@media (max-width: 768px) {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Improve scroll performance */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Prevent zoom on input focus on iOS */
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px;
+  }
+}
